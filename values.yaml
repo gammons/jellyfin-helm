@@ -19,7 +19,7 @@ fullnameOverride: ""
 enableDLNA: false
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
   port: 8096
   ## Specify the nodePort value for the LoadBalancer and NodePort service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
@@ -34,7 +34,7 @@ service:
   ## Use loadBalancerIP to request a specific static IP,
   ## otherwise leave blank
   ##
-  loadBalancerIP:
+  loadBalancerIP: 192.168.1.89
   # loadBalancerSourceRanges: []
   ## Set the externalTrafficPolicy in the Service to either Cluster or Local
   # externalTrafficPolicy: Cluster
@@ -54,7 +54,7 @@ ingress:
 
 persistence:
   config:
-    enabled: false
+    enabled: true
     ## jellyfin configuration data Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -62,7 +62,8 @@ persistence:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    # storageClass: "-"
+    storageClass: "local-nfs-client"
+    storageClassName: "local-nfs-client"
     ##
     ## If you want to reuse an existing claim, you can pass the name of the PVC using
     ## the existingClaim variable
@@ -71,7 +72,7 @@ persistence:
     accessMode: ReadWriteOnce
     size: 1Gi
   media:
-    enabled: false
+    enabled: true
     ## Directory where media is persisted
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -79,14 +80,15 @@ persistence:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    # storageClass: "-"
+    storageClass: "local-nfs-client"
+    storageClassName: "local-nfs-client"
     ##
     ## If you want to reuse an existing claim, you can pass the name of the PVC using
     ## the existingClaim variable
     # existingClaim: your-claim
     # subPath: some-subpath
     accessMode: ReadWriteOnce
-    size: 10Gi
+    size: 100Gi
   extraExistingClaimMounts: []
     # - name: external-mount
     #   mountPath: /srv/external-mount
